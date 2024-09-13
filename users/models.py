@@ -1,29 +1,42 @@
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
+from users.managers import CustomUserManager
 
 
-class User(models.Model):
-    """Модель для пользователей"""
+class CustomUser(AbstractUser):
+    """Кастомная модель для пользователей"""
 
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    username = None
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
-    email = models.EmailField(unique=True)
-    password = models.TextField()
-
-    phone_number = models.CharField(
-        max_length=25,
-        null=True,
-        blank=True,
+    email = models.EmailField(
+        unique=True,
+        db_index=True,
     )
-    address = models.TextField()
-    avatar = models.ImageField()
+    birth_date = models.DateField(null=True)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    phone_number = models.CharField(max_length=25, null=True, blank=True)
 
-    birth_date = models.DateField()
-    date_joined_at = models.DateTimeField(auto_now_add=True)
+    groups = models.ManyToManyField(
+        Group,
+        related_name='customuser_set',  # Уникальное значение related_name
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
+    )
 
-    is_superuser = models.BooleanField()
-    is_staff = models.BooleanField()
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='customuser_permissions_set',  # Уникальное значение related_name
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
+
+    objects = CustomUserManager()
 
     class Meta:
-        verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+        verbose_name = 'Пользователь'
+

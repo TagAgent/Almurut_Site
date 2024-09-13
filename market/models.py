@@ -1,5 +1,8 @@
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 from django.db import models
+
+
 
 
 class ProductCategory(models.Model):
@@ -51,3 +54,25 @@ class ProductGallery(models.Model):
     class Meta:
         verbose_name_plural = 'Галереи товаров'
         verbose_name = 'Галерея товаров'
+
+
+class ProductRating(models.Model):
+    """Модель, чтобы зафиксировать что пользователь поставил оценку для товара"""
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='ratings')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
+    rating = models.PositiveSmallIntegerField(
+        validators=[MaxValueValidator(5)],
+        verbose_name='оценка'
+    )
+    comment = models.TextField(null=True, blank=True, verbose_name='комментарий')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.product.name} - {self.rating}'
+
+    class Meta:
+        verbose_name_plural = 'Оценки товаров'
+        verbose_name = 'Оценка товара'
+        unique_together = ('product', 'user')

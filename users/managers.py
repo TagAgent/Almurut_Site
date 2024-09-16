@@ -5,7 +5,7 @@ class CustomUserManager(BaseUserManager):
     """Кастомный менеджер для модели кастомного пользователя"""
 
     def create_user(self, email, password, **extra_fields):
-        user = self.models(email=email, **extra_fields)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
         return user

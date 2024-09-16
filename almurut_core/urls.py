@@ -19,13 +19,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from market.views import HomeView
+from market.views import HomeView, ProductListView
 from users.views import (UserRegistrationView, UserMakeRegistrationView,
                          UserLoginView, UserMakeLoginView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', HomeView.as_view(), name='home-page-url'),
+    path('product-list/', ProductListView.as_view(), name='product-list-url'),
     path('registration/', UserRegistrationView.as_view(), name='registration-page-url'),
     path('make-registration', UserMakeRegistrationView.as_view(), name='make-registration-url'),
     path('login/', UserLoginView.as_view(), name='login-page-url'),

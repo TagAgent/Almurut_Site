@@ -19,18 +19,26 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from market.views import HomeView, ProductListView
-from users.views import (UserRegistrationView, UserMakeRegistrationView,
-                         UserLoginView, UserMakeLoginView)
+from market.views import (
+    HomeView, ProductListView, ProductDetailView, SendFeedbackView,
+    FavoritesView, AddProductToFavoriteView, DeleteProductFromFavoriteView
+)
+from users.views import (
+    UserRegistrationView, UserMakeRegistrationView,
+    UserLoginView, UserMakeLoginView
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', HomeView.as_view(), name='home-page-url'),
     path('product-list/', ProductListView.as_view(), name='product-list-url'),
+    path('product-detail/<int:pk>/', ProductDetailView.as_view(), name='product-detail-url'),
+    path('send-feedback/', SendFeedbackView.as_view(), name='send-feedback-url'),
     path('registration/', UserRegistrationView.as_view(), name='registration-page-url'),
-    path('make-registration', UserMakeRegistrationView.as_view(), name='make-registration-url'),
+    path('registration/make-registration', UserMakeRegistrationView.as_view(), name='make-registration-url'),
     path('login/', UserLoginView.as_view(), name='login-page-url'),
-    path('make-login', UserMakeLoginView.as_view(), name='make-login-url'),
+    path('login/make-login', UserMakeLoginView.as_view(), name='make-login-url'),
+    path('favorites/', FavoritesView.as_view(), name='favorites-page-url'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

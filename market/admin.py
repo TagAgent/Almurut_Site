@@ -1,7 +1,9 @@
+from itertools import product
+
 from django.contrib import admin
 from django.utils.html import mark_safe
 
-from market.models import Product, ProductCategory, ProductGallery
+from market.models import Product, ProductCategory, ProductGallery, ProductRating
 
 
 @admin.register(ProductCategory)
@@ -27,3 +29,7 @@ class ProductAdmin(admin.ModelAdmin):
         return "Нет изображения"
 
     preview_image_tag.short_description = 'Изображение'
+
+@admin.register(ProductRating)
+class ProductRatingAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product',)

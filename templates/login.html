@@ -5,6 +5,8 @@
     <!--[if lt IE 8]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
+    <p>ПРИВЕТ {{ request.user.first_name }} {{ request.user.last_name.lower }}</p>
+    <p>Дата рождения: {{ request.user.birth_date }} - {{ request.user.birth_date|date:"F" }}</p>
         <!-- Begin Body Wrapper -->
         <div class="body-wrapper">
             <!-- Begin Header Area -->

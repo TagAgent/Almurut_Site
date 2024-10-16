@@ -1,8 +1,5 @@
-from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-
-from users.models import CustomUser
 
 
 class ProductCategory(models.Model):
@@ -45,7 +42,7 @@ class Product(models.Model):
 
     def get_price_with_sales(self):
         """Возвращает цену с учётом скидки"""
-        if self.sales_percent == 0:
+        if self.sales_percent == 0 or self.sales_percent is None:
             return self.price
         else:
             return int((self.price / 100) * (100 - self.sales_percent))
@@ -65,11 +62,20 @@ class ProductGallery(models.Model):
 class ProductRating(models.Model):
     """Модель, чтобы зафиксировать что пользователь поставил оценку для товара"""
 
+    from users.models import CustomUser
+
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(
         validators=[MaxValueValidator(5), MinValueValidator(1)]
     )
+    message = models.TextField()
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+        verbose_name_plural = 'Отзывы'
+        verbose_name = 'Отзыв'
+
